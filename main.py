@@ -1,5 +1,6 @@
 import unittest
 import Lab5_Classes
+from Lab5_Classes import ECG 
 #4 
 class Numbers(unittest.TestCase):
     def setUp(self):
@@ -35,9 +36,37 @@ class Numbers(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.numbers.stringOfNumbers(3.5)
 
-import math
-import unittest
+class TestECG(unittest.TestCase):
+    def setUp(self):
+        self.ecg = ECG()
+        self.sample_ecg = [0.1, 0.2, 1.2, 0.3, 0.1, 1.5, 0.2]
 
-class TestNumbers(unittest.TestCase):
-    def __init__(self, sum=0):
-        self.sum = sum
+    # 5.1 Test Detect Peaks Function
+    def test_detect_peaks(self):
+        #With a threshold of 1 the indices should be 2 and 5
+        self.assertEqual(self.ecg.detect_peaks(self.sample_ecg, 1), [2, 5])
+        
+        #When the threshold is 3 it shouldn't have any peaks
+        self.assertEqual(self.ecg.detect_peaks(self.sample_ecg, 3), [])
+        
+    # 5.2 Test remove baseline
+    def test_remove_baseline(self):
+        cleaned_ecg = self.ecg.remove_baseline(self.sample_ecg)
+        
+        #Checking that the baseline is about 0
+        mean_val = sum(cleaned_ecg) / len(cleaned_ecg)
+        self.assertAlmostEqual(mean_val, 0, places=7)
+
+    # 5.3 Test Normalization
+    def test_normalize(self):
+        norm = self.ecg.normalize(self.sample_ecg)
+        
+        #Checking normalization keeps max at 1
+        self.assertEqual(max(norm), 1)
+        
+        zero_sig = [0, 0, 0]
+        self.assertEqual(self.ecg.normalize(zero_sig), [0, 0, 0])
+
+if __name__ == '__main__':
+    unittest.main()
+    
