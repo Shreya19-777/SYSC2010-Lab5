@@ -4,7 +4,6 @@ import math
 ecg = [0.1, 0.2, 1.2, 0.3, 0.1, 1.5, 0.2]
  
 import math
-
 class Numbers:
     def __init__(self, sum=0):
         self.sum = sum
@@ -113,11 +112,13 @@ class ECG:
         valid = False
         
         if isinstance(signal, list) :
-            count = 0
+            count = False
             for val in signal :
+                valid = False
+                count = False
                 if isinstance(val, int) :
                     valid = True
-                    count += 1
+                    count = True
                 
         return valid & count
 

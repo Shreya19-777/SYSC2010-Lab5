@@ -34,3 +34,10 @@ class Numbers(unittest.TestCase):
             self.numbers.stringOfNumbers(-1)
         with self.assertRaises(TypeError):
             self.numbers.stringOfNumbers(3.5)
+
+import math
+import unittest
+
+class TestNumbers(unittest.TestCase):
+    def __init__(self, sum=0):
+        self.sum = sum
