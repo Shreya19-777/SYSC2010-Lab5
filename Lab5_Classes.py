@@ -94,8 +94,9 @@ class ECG:
         Returns a list of RR intervals in seconds
         '''
         intervals = []
-
-        #Your Code Here
+        for i in range(len(peaks) - 1):
+            diff = (peaks[i+1] - peaks[i]) / fs
+            intervals.append(diff)
 
         return intervals
     
@@ -109,18 +110,17 @@ class ECG:
 
         Returns a boolean, True (1) if a proper signal, False (0) otherwise
         '''
-        valid = False
+        if not isinstance(signal, list) :
+            return False
+        if len(signal) == 0 :
+            return False
         
-        if isinstance(signal, list) :
+        for value in signal :
             count = False
-            for val in signal :
-                valid = False
-                count = False
-                if isinstance(val, int) :
-                    valid = True
-                    count = True
-                
-        return valid & count
+            if isinstance(value, (int,float)) :
+                count = True
+            
+        return count
 
     #7
     def heart_rate(self, peaks, fs):
@@ -131,7 +131,20 @@ class ECG:
         This function should return the heart rate in (BPM)
         '''
         heartRate = 0
-
-        #Your Code Here
+        
+        if len(peaks) < 2:
+            return 0
+        
+        intervals = self.rr_intervals(peaks, fs)
+        
+        if intervals == 0 :
+            return 0
+        
+        average_interval = sum(intervals) / len(intervals)
+        
+        # BPM = 60 seconds / average interval in seconds
+        heartRate = 60 / average_interval
 
         return heartRate
+    
+    
